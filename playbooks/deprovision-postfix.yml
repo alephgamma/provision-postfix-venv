@@ -1,0 +1,16 @@
+- name: uninstall postfix and close smtp - simple
+  hosts: mail
+  become: true
+  tasks:
+    - name: uninstall postfix
+      yum:
+        name: postfix
+        state: absent
+
+    - name: remove smtp
+      firewalld: 
+        zone: public
+        service: smtp
+        permanent: yes
+        immediate: yes
+        state: disabled
