@@ -5,6 +5,18 @@
     version: postfix-3.5.8-2.el8.x86_64
     domain: "{{ lookup('env','DOMAIN') }}"
     tpath: "/home/centos/provision-postfix-venv/templates"
+
+    acme_challenge_type: http-01
+    acme_directory: https://acme-staging-v02.api.letsencrypt.org/directory
+    acme_version: 2
+    acme_email: nunya@bidnes.com
+    acme_dir: "/etc/acme"
+    acme_keys_dir: "{{ acme_dir }}/keys"
+    acme_csrs_dir: "{{ acme_dir }}/csrs"
+    acme_certs_dir: "{{ acme_dir}}/certs"
+    acme_account_key: "{{acme_dir}}/account/account.key"
+    domain_name: "{{ domain }}"
+
   tasks:
     - name: install postfix
       yum:
@@ -18,6 +30,40 @@
         permanent: yes
         immediate: yes
         state: enabled
+
+#    - name: "create required directories in /etc/acme"
+#      file:
+#        path: "{{ acme_dir}}/{{ item }}"
+#        state: directory
+#        owner: root
+#        group: root
+#        mode: u=rwx,g=x,o=x
+#      with_items:
+#        - account
+#        - certs
+#        - csrs
+#        - keys
+#    - name: create the account key
+#      openssl_privatekey:
+#        path: "{{ acme_account_key }}"
+#        size: 4096
+#    - name: create the privatekey
+#      openssl_privatekey:
+#        path: "{{ acme_keys_dir }}/{{ domain }}.key"
+#        size: 4096
+#    - name: create the csr
+#      openssl_csr:
+#        privatekey_path: "{{ acme_account_key }}"
+#        path: "{{ acme_csrs_dir }}/{{domain}}.csr"
+#        common_name: "{{ domain }}"
+#        subject_alt_name: "DNS:mail.{{ domain }}"
+#    - name: create the challenge
+#      acme_certificate:
+#        account_key_src: "{{ acme_account_key }}"
+#        csr: "{{ acme_csrs_dir }}/{{ domain }}.csr"
+#        dest: "{{ acme_certs_dir }}/{{domain}}.crt"
+#        fullchain_dest: "{{ acme_certs_dir }}/fullchain.crt"
+#      register: sample_com_challenge
 
     - name: create main.cf
       template: 
