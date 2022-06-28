@@ -23,3 +23,9 @@
       template: 
         src: "{{ tpath }}/main.cf.j2"
         dest: "/etc/postfix/main.cf"
+
+    - name: start and enable postfix
+      systemd: 
+        name: postfix
+        state: started
+        enabled: yes
