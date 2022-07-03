@@ -69,9 +69,17 @@
       template: 
         src: "{{ tpath }}/main.cf.j2"
         dest: "/etc/postfix/main.cf"
+      notify: "reload postfix"
 
     - name: start and enable postfix
       systemd: 
         name: postfix
         state: started
         enabled: yes
+
+  handlers:
+    - name: postfix reload
+      systemd:
+        name: postfix
+        state: reloaded
+      listen: "reload postfix"
