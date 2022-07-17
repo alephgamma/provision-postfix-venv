@@ -1,0 +1,23 @@
+---
+- name: configure postfix with maildir
+  hosts: mail
+  become: true
+  vars:
+    owner: "centos"
+    maildir: "Maildir"
+    vdirs:
+      [ "cur", "new", "tmp", "sent" ]
+  tasks:
+    - name: create user
+      user: 
+        name: "{{ owner }}"
+
+    - name: create maildir
+      file: 
+        state: directory
+        path: "/home/{{ owner}}/{{ maildir }}/{{ item }}"
+        owner: "{{ owner }}"
+        group: "{{ owner }}"
+        mode: '0700'
+      loop:
+        - "{{ vdirs }}"

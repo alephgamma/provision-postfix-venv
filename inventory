@@ -1,2 +1,2 @@
 [postfix]
-mail ansible_host=mail.whitehatmonkey.com
+mail ansible_host=mail.stellarchimp.com
