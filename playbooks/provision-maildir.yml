@@ -5,8 +5,7 @@
   vars:
     owner: "centos"
     maildir: "Maildir"
-    vdirs:
-      [ "cur", "new", "tmp", "sent" ]
+    vdirs: [ "cur", "new", "tmp", "sent" ]
   tasks:
     - name: create user
       user: 
@@ -19,5 +18,4 @@
         owner: "{{ owner }}"
         group: "{{ owner }}"
         mode: '0700'
-      loop:
-        - "{{ vdirs }}"
+      loop: "{{ vdirs }}"
